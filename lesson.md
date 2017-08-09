@@ -55,7 +55,8 @@ Clean up directories
 
 We will use a `wget` command to download the raw reads from EBI. 
  
-*Discussion question: What are raw reads?*
+*Discussion question*: 
+- What are raw reads?
 
 ```
 # K12 (paired ends), download ~10 min
@@ -92,6 +93,7 @@ Now extract the contents of the tar file:
 tar -vxzf sratoolkit.tar.gz
 
 ```
+
 Note the name of the extracted tar file that will vary by name of the latest release you downloaded. It will start with "sratoolkit..."
 
 ```
@@ -105,9 +107,11 @@ export PATH=$PATH:$PWD/sratoolkit.2.8.2-1-ubuntu64/bin
 ```
 
 Verify that the export step worked:
+
 ```
 which fastq-dump
 ```
+
 If it does, your computer should answer with the location of the software. Your output will look similar but somewhat different from this:
 `/home/tx160085/sratoolkit.2.8.2-1-ubuntu64/bin/fastq-dump`
 
@@ -117,8 +121,7 @@ Now you are ready to download the DNA sequence file from NCBI. If you are not al
 cd ~/work
 ```
 
-Then download. Note that the file we want from the SRA archive is called ERR580964. You can also look at the archive entry directly online here:
-https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=ERR580964
+Then download. Note that the file we want from the SRA archive is called ERR580964. You can also look at the archive entry directly online here: [https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=ERR580964](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=ERR580964)
 
 ```
 fastq-dump --outdir fastq --gzip --skip-technical  --readids --read-filter pass --dumpbase --split-files --clip ERR580964 
@@ -137,6 +140,7 @@ Now check your work folder for a new folder called fastq, which contains two fil
 ls
 cd fastq/
 ```
+
 *Discussion questions*:
 - Did it work?
 - What did you just do?
@@ -171,7 +175,6 @@ cd
 
 We will use FastQC to look at the quality scores of the raw reads.
 
-
 ```
 mkdir QA
 cd QA
@@ -181,9 +184,11 @@ cd before_trimming
 ```
 
 This will generate `.html` files. Download the files using Filezilla, CyberDuck, or RStudio and view them.  
-> What is a quality score? 
-> What does it tell you?
-> How easy is it to interpret these results without visualization?
+
+*Discussion questions:*
+- What is a quality score? 
+- What does it tell you?
+- How easy is it to interpret these results without visualization?
 
 ### Running RStudio on Jetstream
 
@@ -218,14 +223,18 @@ echo My RStudio Web server is running at: http://$(hostname):8787/
 ```
 
 In RStudio, open the QA folder in the file system panel. Click the fastqc_report.html files and select the option to view the files.
-> Did you learn anything new by visualizing the quality assessment data?
+
+*Discussion question:*
+
+- Did you learn anything new by visualizing the quality assessment data?
 
 ### Trimming
 
 We will trim low quality bases using trimmomatic. Then we will interleave the reads using the `interleave-reads.py` script from khmer.
 
-**to do: check to see what adapters were used in sequencing**
-> What kinds of sequences do we want to trim?
+*Discussion question:*
+
+- What kinds of sequences do we want to trim?
 
 ```
 cd ~/work
@@ -260,17 +269,22 @@ TrimmomaticPE ecoli-O157-1.fastq.gz \
 ```
 
 Now re-rerun fastqc with the trimmed reads
+
 ```   
 cd ~/QA/after_trimming
 ~/FastQC/fastqc ~/work/*qc.fq.gz -o . 
 ```
-> Should trimming change the output of FastQC?
-> Did it?
+*Discussion question:*
 
-Finally, interleave the trimmed reads 
-> Why are we doing this?
+- Should trimming change the output of FastQC?
+- Did it?
+
+Finally, interleave the trimmed reads
+
+*Discussion question:*
+- Why are we doing this?
+
 ```
-
 python2.7 -m virtualenv khmerEnv
 source khmerEnv/bin/activate
 
@@ -302,8 +316,10 @@ deactivate
 ```
 
 ### Assembly
-> What is genome assembly?
-> Why does it take a while for the computer to complete this step?
+
+*Discussion questions:*
+- What is genome assembly?
+- Why does it take a while for the computer to complete this step?
 
 Download and build the assembler, MEGAHIT:
 
@@ -333,9 +349,13 @@ Take a look at the assembly.
 ```
 head ecoli-K12-assembly.fa
 ```
-> What can you tell by looking at the assembly?
-> What can't you tell?
-> What do we still need to find out?
+
+*Discussion questions:*
+
+- What can you tell by looking at the assembly?
+- What can't you tell?
+- What do we still need to find out?
+
 ## Annotations: Install Prokka
 
 Download and extract the latest version of Prokka:
@@ -388,11 +408,15 @@ ln -fs ~/work/ecoli-K12-assembly.fa
 ```
 
 Run Prokka on *E. coli* K12 assembly.
+
 ```
 prokka ecoli-K12-assembly.fa --outdir prokka_annotation_K12 --prefix myecoli-K12
 ```
-> What did Prokka do?
-> Are we done yet? 
+
+*Discussion questions:*
+
+- What did Prokka do?
+- Are we done yet? 
 
 ### BLASTing Annotated Genes Against Custom Databases
 
@@ -432,18 +456,16 @@ Look at protein list for *E. coli* K12.
 ```
 head ecoli-K12-blast-results.faa
 ```
-> NOW we're done! 
-> Wait, are we done?
-> Which one was the pathogenic one again?
 
 ### Repeat the Analyses with O157
 
 Do the same workflow as above (assembly with MEGAHIT, annotate with Prokka, BLAST against *E. coli* K12 and O157 database) with the O157 reads.
 
 *For reference:* The download and install instructions are at the top with K12 instructions, but assembly steps onward are below.
-> Take a moment to be sure you know where you're starting. 
-> What steps came before Assembly?
-> Did we complete them all for O157?
+
+Take a moment to be sure you know where you're starting. 
+- What steps came before Assembly?
+- Did we complete them all for O157?
 
 Assembly:
 
@@ -474,48 +496,57 @@ blastp -query prokka_annotation_O157/myecoli-O157.faa -db ncbi-ecoli-K12-O157.fa
 ```
 
 How many lines are in each BLAST result? Use `wc -l` to compare the two.
-> What does this tell us?
-> What else would you like to know?
+
+*Discussion questions:*
+
+- What does this tell us?
+- What else would you like to know?
 
 **Retrieve gene ontology (GO) terms for the BLAST hits**
-> What is gene ontology and why is this useful?
+
+*Discussion question:*
+- What is gene ontology and why is this useful?
 
 [RStudio and mygene Install Hacking here](https://hackmd.io/GwMwzAHAnApgRgQwLQgKxwCxI4gDEiXAJigOAGNgiEFzq5yg)
 
 Install Mygene
+
 ```
 source("http://bioconductor.org/biocLite.R")
 biocLite("mygene")
 ```
+
 Load Mygene
+
 ```
 library(mygene)
 ```
-Create a vector of the GenBank BLAST hits using the GenBank accession numbers from the previous step (here is an example with two GenBank hits) 
 
-`xli <- c('NP_415407.1', 'WP_000891683.1')`
+Create a vector of the GenBank BLAST hits using the GenBank accession numbers from the previous step (here is an example with two GenBank hits): 
+
+```
+xli <- c('NP_415407.1', 'WP_000891683.1')
+```
 
 Run the search
+
 ```
 res <- queryMany(xli, scopes='accession', fields=c('go'), species='Escherichia', returnall=TRUE)
 ```
 
 Display the results
+
 ```
 res
 ```
+
 Save results to file
 
+```
+write.table(res, "res.txt", sep="\t")
+```
 
-```write.table(res, "res.txt", sep="\t")```
-
-
-
-### Next Steps
-
-- Do the same analysis for *E. coli* O157. At the end you should have a file called `ecoli-O157-blast-results.faa` assuming you follow the naming scheme of the workflow above.
-
-**Visualize gene ontology(GO) results for each *E. coli* strain as word clouds**
+#### Visualize gene ontology(GO) results for each *E. coli* strain as word clouds
 
 Install and load GOsummaries in R
 
@@ -525,15 +556,15 @@ biocLite("GOsummaries")
 library(GOsummaries)
 ```
 
-enter GO terms (Term) and corresponding frequencies for each GO term (Score) for the 0157:H7 strain (wcd1)  and K12 strain (wcd2)
+Enter GO terms (Term) and corresponding frequencies for each GO term (Score) for the 0157:H7 strain (wcd1)  and K12 strain (wcd2)
+
 ```
 wcd1 = data.frame(Term = c("lipid transport", "cysteine export", "transmembrane transport"), Score = c(0.05, 0.001, 0.0001))
 
 wcd2 = data.frame(Term = c("redox homeostasis", "transmembrane transport", "lipid transport"), Score = c(0.02, 0.005, 0.2))
 ```
 
-
-generate a word cloud block for each *E. coli* strain
+Generate a word cloud block for each *E. coli* strain
 
 ```
 gs = gosummaries(wc_data = list(Results1 = wcd1, Results2 = wcd2))
@@ -541,7 +572,7 @@ gs = gosummaries(wc_data = list(Results1 = wcd1, Results2 = wcd2))
 plot(gs, filename = "GO wordcloud.pdf")
 ```
 
-**Using RamiGO as in interface to AmiGO to visualize gene ontology (GO) trees using GO terms**
+#### Using RamiGO as in interface to AmiGO to visualize gene ontology (GO) trees using GO terms
 
 Install and load RamiGO in R
 
@@ -550,8 +581,11 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("RamiGO")
 library(RamiGO)
 ```
+
 Enter the GO IDs for 0157:H7 strain
+
 ```
 goIDs <- c("GO:0006869", "GO:0033228", "GO:0034775", "GO:0045454")
 
 pngRes <- getAmigoTree(goIDs=goIDs, filename="GO tree", picType="png")
+```
