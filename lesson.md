@@ -14,10 +14,10 @@
 6. Search for differences in gene content between two strains
 	- Download all annotated genes both K12 and O157 from NCBI
 	- Create two custom protein databases for BLAST: one containing all annotated K12 downloaded and one containing O157 downloaded genes
-7. Identify which genes in newly assembled genome are in custom databases
+	- Identify which genes in newly assembled genome are in custom databases
 	- BLAST genome (nucleotides) against protein databases
-8. Retrieve gene ontology (GO) terms for BLAST hits
-9. Visualize differences in GO between K12 and O157 *E. coli*
+7. Retrieve gene ontology (GO) terms for BLAST hits
+8. Visualize differences in GO between K12 and O157 *E. coli*
 
 ## Vocabulary
 
@@ -27,7 +27,7 @@ https://hackmd.io/OwFgTAbAjFDGCGBaCAjAHGRJhQKaIE4C9FYAGeMAlBAEwFYDYg==
 
 http://ivory.idyll.org/blog/2017-dibsi-xsede-request.html
 
-## Launch an instance on Jetstream 
+## 1. Create and log into an m1. medium Jetstream instance
 
 NOTE: the following instructions describe the procedures used during the 2017 ANGUS workshop at UC Davis. You will need to create custom instructions to help students to access the allocation for your class.
 http://angus.readthedocs.io/en/2017/jetstream/boot.html
@@ -37,7 +37,7 @@ http://angus.readthedocs.io/en/2017/jetstream/boot.html
 - What is the "cloud"? 
 - How is Jetstream different from other cloud-based services you have used?
 
-## Download Data and Assembly
+## 2. Download genomes from two *E. coli* strains
 
 Make a directory for work.
 
@@ -156,7 +156,7 @@ mv ~/work/fastq/ERR580964_pass_2.fastq.gz ~/work/ecoli-O157-2.fastq.gz
 
 *Note*: The part of this lesson dealing with assembly should be expanded into its own lesson. It's here for reference because we are starting with the raw reads for the *E. coli* K12 reads.
 
-### Quality assessment
+## 3. Quality control
 
 Install software for quality assessment using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), trimming with [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic), and dependencies.
 
@@ -315,7 +315,7 @@ done
 deactivate
 ```
 
-### Assembly
+## 4. Assembly of cleaned reads using MEGAHIT
 
 *Discussion questions:*
 - What is genome assembly?
@@ -356,7 +356,7 @@ head ecoli-K12-assembly.fa
 - What can't you tell?
 - What do we still need to find out?
 
-## Annotations: Install Prokka
+## 5. Annotate genome assemblies Prokka
 
 Download and extract the latest version of Prokka:
 
@@ -418,7 +418,9 @@ prokka ecoli-K12-assembly.fa --outdir prokka_annotation_K12 --prefix myecoli-K12
 - What did Prokka do?
 - Are we done yet? 
 
-### BLASTing Annotated Genes Against Custom Databases
+## 6. Search for differences in gene content between two strains
+
+First we will create custom databases from annotated genomes of both strains from NCBI.
 
 Look at `.faa` file:
 
@@ -502,7 +504,7 @@ How many lines are in each BLAST result? Use `wc -l` to compare the two.
 - What does this tell us?
 - What else would you like to know?
 
-**Retrieve gene ontology (GO) terms for the BLAST hits**
+## 7. Retrieve gene ontology (GO) terms for BLAST hits
 
 *Discussion question:*
 - What is gene ontology and why is this useful?
@@ -546,7 +548,7 @@ Save results to file
 write.table(res, "res.txt", sep="\t")
 ```
 
-#### Visualize gene ontology(GO) results for each *E. coli* strain as word clouds
+## 8. Visualize differences in GO between K12 and O157 *E. coli*
 
 Install and load GOsummaries in R
 
