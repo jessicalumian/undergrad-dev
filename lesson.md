@@ -20,21 +20,29 @@
 9. Visualize differences in GO between K12 and O157 *E. coli*
 
 ## Vocabulary
+
 https://hackmd.io/OwFgTAbAjFDGCGBaCAjAHGRJhQKaIE4C9FYAGeMAlBAEwFYDYg==
 
 ## Jetstream allocation request (for instructors planning a course)
+
 http://ivory.idyll.org/blog/2017-dibsi-xsede-request.html
 
 ## Launch an instance on Jetstream 
+
 NOTE: the following instructions describe the procedures used during the 2017 ANGUS workshop at UC Davis. You will need to create custom instructions to help students to access the allocation for your class.
 http://angus.readthedocs.io/en/2017/jetstream/boot.html
-> What is the "cloud"?
-> How is Jetstream different from other cloud-based services you have used?
+
+*Discussion questions*:
+
+- What is the "cloud"? 
+- How is Jetstream different from other cloud-based services you have used?
 
 ## Download Data and Assembly
 
 Make a directory for work.
-> What is a directory?
+
+*Discussion question*: 
+- What is a directory?
 
 ```
 mkdir ~/work
@@ -46,7 +54,9 @@ Clean up directories
 #### *E. coli* K12 (nonpathogenic) 
 
 We will use a `wget` command to download the raw reads from EBI. 
-> What are raw reads? 
+ 
+*Discussion question: What are raw reads?*
+
 ```
 # K12 (paired ends), download ~10 min
 wget ftp://ftp.sra.ebi.ac.uk/vol1/ERA000/ERA000206/fastq/200x100x100-081224_EAS20_0008_FC30TBBAAXX-6.tar.gz
@@ -69,18 +79,25 @@ gzip ~/work/ecoli-K12-*.fastq
 We will install fastq-dump and the SRA Toolkit to download the reads for the O157 strain because they are not readily available with a `wget` command.
 
 ## Download SRA-toolkit ##
+
 First we need to download the sra-toolkit from NCBI:
+
 ```
 wget --output-document sratoolkit.tar.gz http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz 
 ```
+
 Now extract the contents of the tar file:
+
 ```
 tar -vxzf sratoolkit.tar.gz
+
 ```
 Note the name of the extracted tar file that will vary by name of the latest release you downloaded. It will start with "sratoolkit..."
+
 ```
 ls
 ```
+
 In order for the new software to work we will have to put it in the VM's path. In the example the name of the sratoolkit is sratoolkit.2.8.2-1-ubuntu64. Make sure to get the dots and dashes correctly copied and don't forget to add /bin following the sratoolkit name.
 
 ```
@@ -92,32 +109,39 @@ Verify that the export step worked:
 which fastq-dump
 ```
 If it does, your computer should answer with the location of the software. Your output will look similar but somewhat different from this:
-/home/tx160085/sratoolkit.2.8.2-1-ubuntu64/bin/fastq-dump
+`/home/tx160085/sratoolkit.2.8.2-1-ubuntu64/bin/fastq-dump`
 
-Now you are ready to download the DNA sequence file from NCBI. 
-If you are not already there, move into your "work" folder to download the data there.
+Now you are ready to download the DNA sequence file from NCBI. If you are not already there, move into your "work" folder to download the data there.
+
 ```
 cd ~/work
 ```
+
 Then download. Note that the file we want from the SRA archive is called ERR580964. You can also look at the archive entry directly online here:
 https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=ERR580964
+
 ```
 fastq-dump --outdir fastq --gzip --skip-technical  --readids --read-filter pass --dumpbase --split-files --clip ERR580964 
 ```
+
 This will take a few minutes to finish. During this time your computer will appear to be frozen. At the end you will see this:
+
+```
 Read 1680150 spots for ERR580964
 Written 1680150 spots for ERR580964
+```
 
 Now check your work folder for a new folder called fastq, which contains two files with pair-end reads of the pathogenic E.coli strain O157:H12.
+
 ```
 ls
-```
-```
 cd fastq/
 ```
-> Did it work?
-> What did you just do?
-> Why is the next step a good idea?
+*Discussion questions*:
+- Did it work?
+- What did you just do?
+- Why is the next step a good idea?
+
 ### Rename O157 files
 
 ```
