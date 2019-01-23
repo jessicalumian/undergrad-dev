@@ -1,0 +1,5 @@
+Add comments to code
+Clean up text/explanations
+Comb through lesson and make a detailed list of what to change
+Add section about cloud computing, explain jetstream (and that these instructions are written for jetstream, they may work on another cloud computer but there will be modifications)
+Add introduction section on what this is: material for teaching bioinformatics. Students can tackle this on their own, or it can be used and modified as lesson curriculum.
